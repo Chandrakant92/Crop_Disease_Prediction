@@ -31,6 +31,7 @@ const Capture = ({ navigation, route }) => {
   const [picture, setPicture] = useState(getDetails("picture"));
   const [modal, setModal] = useState(false);
   const [enableshift, setenableShift] = useState(false);
+  const [result, setResult]=useState();
 
   const pickFromGallery = async () => {
     const { granted } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -68,7 +69,7 @@ const Capture = ({ navigation, route }) => {
 
       if (!result.cancelled) {
         const formData = new FormData();
-        formData.append('image', {
+        formData.append('Image', {
           uri: result.uri,
           type: 'image/jpeg',
           name: 'my_image.jpg',
@@ -76,7 +77,7 @@ const Capture = ({ navigation, route }) => {
 
         uploadImage(formData);
 
-        Alert.alert("Your Image Uploaded Successfully");
+        
       }
     } else {
       Alert.alert("You need to give permission to access the camera roll.");
@@ -84,13 +85,17 @@ const Capture = ({ navigation, route }) => {
   }
 
   const uploadImage = (formData) => {
-    axios.post('  https://9372-103-127-35-2.ngrok-free.app/upload', formData, {
+    axios.post('https://3671-103-127-35-2.ngrok-free.app/predict', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     })
-      .then((response) => {
+    .then((response) => {
+        console.log(formData,"For data");
         console.log('Image uploaded successfully:', response.data);
+        setResult(JSON.stringify(response.data));
+        Alert.alert("Your Image Uploaded Successfully", JSON.stringify(response.data));
+
       })
       .catch((error) => {
         console.error('Error uploading image:', error);

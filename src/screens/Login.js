@@ -104,7 +104,8 @@ const Login = ({ navigation }) => {
                         style={button1}
                         activeOpacity={0.8}
                         onPress={() => {
-                            Sendtobackend();
+                            // Sendtobackend();
+                            login();
                              setloading(true);
                         }}
                     >
